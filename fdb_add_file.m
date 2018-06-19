@@ -26,6 +26,7 @@ if exist(file,'file')
             % if it does not work, fdb should be un-altered:
             try
                 fdb = fdb_add_core(fdb,ar,file,name);
+                fdb.info.predictor_status = 0;
                 fprintf(' ADDED.\n');
             catch ERR
                 fprintf(' omitted (not a valid workspace).\n')
@@ -78,7 +79,15 @@ if isempty(ia) % append
     fdb.checksum.optim{i}   = newfdb.optim;
     fdb.checksum.para{i}    = newfdb.para;
     
+    checksum = arAddToCheckSum(ar.info.cvodes_flags,[]);
+    checkstr = dec2hex(typecast(checksum.digest,'uint8'))';    
+    fdb.checksum.cvodes_flags{i} = checkstr(:)';
 
+    checksum = arAddToCheckSum(ar.info.arsimucalc_flags,[]);
+    checkstr = dec2hex(typecast(checksum.digest,'uint8'))';    
+    fdb.checksum.arsimucalc_flags{i} = checkstr(:)';
+
+    
     fdb.files.ar{i} = [fdb.info.fdb_path,ar.checkstrs.total,'.mat'];
     fdb.files.source{i} = file;
     fdb.files.fkt{i} = [ar.fkt,'.',mexext];

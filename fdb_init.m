@@ -7,6 +7,7 @@ fdb.info = struct;
 fdb.info.fields.config = cell(0);
 fdb.info.fields.optim = cell(0);
 fdb.info.fields.para = cell(0);
+fdb.info.predictor_status = 0; % predictors outdated
 
 % path to the database files
 fdb.info.fdb_path = [fileparts(which('fdb_init')),'/Database/'];
@@ -21,6 +22,9 @@ fdb.checksum.data = cell(0);
 fdb.checksum.fkt = cell(0);
 fdb.checksum.optim = cell(0);
 fdb.checksum.para = cell(0);
+fdb.checksum.cvodes_flags = cell(0);
+fdb.checksum.arsimucalc_flags = cell(0);
+
 
 % This struct will contain filenames
 fdb.files = struct;

@@ -18,8 +18,7 @@ for i=1:length(files)
         name = tmp.ar.name;
     else
         name = '';
-    end
-    
+    end    
     
     fdb = fdb_add_file(fdb,files{i},name);
 end
