@@ -66,10 +66,10 @@ if isempty(ia) % append
         fdb.setups{i} = [];
     end
     
-    tmp = load(['Checksums',filesep,'para_',ar.checkstrs.para,'.mat']);
+    tmp = load(['CheckSums',filesep,'para_',ar.checkstrs.para,'.mat']);
     newfdb.para = tmp.ar;
     
-    tmp = load(['Checksums',filesep,'fitting_',ar.checkstrs.fitting,'.mat']);
+    tmp = load(['CheckSums',filesep,'fitting_',ar.checkstrs.fitting,'.mat']);
     newfdb.optim = tmp.ar.config.optim;
     newfdb.config =  rmfield(tmp.ar,'config'); % config.optim is stored separately
             
