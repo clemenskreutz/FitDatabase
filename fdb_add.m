@@ -1,0 +1,41 @@
+% fdb = fdb_add(fdb)
+% 
+%   Recursively add all available fit sequences in the subfolders of the
+%   working directory.
+% 
+% 
+% fdb = fdb_add(fdb,folders)
+% 
+%   Adding fit sequences in folders
+% 
+%   folders     string 
+%               or cell of foldernames
+
+function fdb = fdb_add(fdb,folders)
+if ~exist('folders','var') || isempty(folders)
+    if exist('Results','dir')
+    	[~, ~, folders] = fileChooser('./Results', [], -1);
+        folders = strcat('Results',filesep,folders);
+    else
+        [~,folders] = list_files_recursive([],'folders'); 
+    end
+end
+
+if ischar(folders)
+    folders = {folders};
+end
+
+for f=1:length(folders)   
+    file = [folders{f},filesep,'workspace.mat'];
+    [~,name] = fileparts(fileparts(fileparts(folders{f})));
+    close all
+    try
+        fprintf('%s ...',file);
+        fdb = fdb_add_file(fdb,file,name);
+    catch ERR
+        file
+        rethrow(ERR)
+    end
+end
+
+
