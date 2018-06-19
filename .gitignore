@@ -1,0 +1,7 @@
+# This file has been generated using arFramework3/Advanced/write_gitignore.m
+#######################################
+
+Database/*
+Workspaces/*
+*.mat
+
