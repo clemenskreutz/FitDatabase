@@ -56,57 +56,57 @@ if isempty(ia) % append
     fdb.ID.(ID) = i; % ID_ has to be added to prevent numbers at the beginning of the fieldname
 
     
-    fdb.checksum.data{i} = ar.checkstrs.data;
+    fdb.checksum.data{i,1} = ar.checkstrs.data;
     
-    fdb.checksum.fkt{i} = ar.checkstrs.fkt; % all checksum fields have to be structs
+    fdb.checksum.fkt{i,1} = ar.checkstrs.fkt; % all checksum fields have to be structs
     
     if isfield(ar,'setup')
-        fdb.setups{i} = ar.setup;
+        fdb.setups{i,1} = ar.setup;
     else
-        fdb.setups{i} = [];
+        fdb.setups{i,1} = [];
     end
     
     tmp = load(['CheckSums',filesep,'para_',ar.checkstrs.para,'.mat']);
-    newfdb.para = tmp.ar;
+    newinfo.para = tmp.ar;
     
     tmp = load(['CheckSums',filesep,'fitting_',ar.checkstrs.fitting,'.mat']);
-    newfdb.optim = tmp.ar.config.optim;
-    newfdb.config =  rmfield(tmp.ar,'config'); % config.optim is stored separately
+    newinfo.optim = tmp.ar.config.optim;
+    newinfo.config =  rmfield(tmp.ar.config,'optim'); % config.optim is stored separately
             
-    [fdb,newfdb] = updateFields(fdb,newfdb);
+    [fdb,newinfo] = fdb_Update_InfoFields(fdb,newinfo);
     
-    fdb.checksum.config{i}  = newfdb.config;
-    fdb.checksum.optim{i}   = newfdb.optim;
-    fdb.checksum.para{i}    = newfdb.para;
+    fdb.checksum.config{i,1}  = newinfo.config;
+    fdb.checksum.optim{i,1}   = newinfo.optim;
+    fdb.checksum.para{i,1}    = newinfo.para;
     
     checksum = arAddToCheckSum(ar.info.cvodes_flags,[]);
     checkstr = dec2hex(typecast(checksum.digest,'uint8'))';    
-    fdb.checksum.cvodes_flags{i} = checkstr(:)';
+    fdb.checksum.cvodes_flags{i,1} = checkstr(:)';
 
     checksum = arAddToCheckSum(ar.info.arsimucalc_flags,[]);
     checkstr = dec2hex(typecast(checksum.digest,'uint8'))';    
-    fdb.checksum.arsimucalc_flags{i} = checkstr(:)';
+    fdb.checksum.arsimucalc_flags{i,1} = checkstr(:)';
 
     
-    fdb.files.ar{i} = [fdb.info.fdb_path,ar.checkstrs.total,'.mat'];
-    fdb.files.source{i} = file;
-    fdb.files.fkt{i} = [ar.fkt,'.',mexext];
+    fdb.files.ar{i,1} = [fdb.info.fdb_path,ar.checkstrs.total,'.mat'];
+    fdb.files.source{i,1} = file;
+    fdb.files.fkt{i,1} = [ar.fkt,'.',mexext];
     
-    fdb.fits.chi2s{i} = ar.chi2s(:);
-    fdb.fits.ps{i} = ar.ps;
-    fdb.fits.ps_start{i} = ar.ps_start;
+    fdb.fits.chi2s{i,1} = ar.chi2s(:);
+    fdb.fits.ps{i,1} = ar.ps;
+    fdb.fits.ps_start{i,1} = ar.ps_start;
     
-    fdb.name{i} = name;
+    fdb.name{i,1} = name;
     
     % copying should be the last step to prevent copying in case of errors:
     try
-        copyfile(fdb.files.source{i},fdb.files.ar{i});
-        save(fdb.files.ar{i},'name','-append');
+        copyfile(fdb.files.source{i,1},fdb.files.ar{i,1});
+        save(fdb.files.ar{i,1},'name','-append');
     end
     
-    if exist(fdb.files.fkt{i},'file')
+    if exist(fdb.files.fkt{i,1},'file')
         try
-            copyfile(fdb.files.fkt{i},fdb.info.fdb_path);
+            copyfile(fdb.files.fkt{i,1},fdb.info.fdb_path);
         end
     end
     
@@ -114,32 +114,9 @@ else % append
 
     i = ia;
 
-    fdb.fits.chi2s{i} = [fdb.fits.chi2s{i};ar.chi2s(:)];
-    fdb.fits.ps{i} = [fdb.fits.ps{i};ar.ps];
-    fdb.fits.ps_start{i} = [ar.ps_start;fdb.fits.ps_start{i}];
+    fdb.fits.chi2s{i,1} = [fdb.fits.chi2s{i,1},ar.chi2s(:)'];
+    fdb.fits.ps{i,1} = [fdb.fits.ps{i,1},ar.ps];
+    fdb.fits.ps_start{i,1} = [ar.ps_start,fdb.fits.ps_start{i,1}];
 end
 
-
-% This function updates the list of fieldnames in ar.info.fields and add
-% missing fields to newfdb in case the new fit sequence has missing
-% annotation
-function [fdb,newfdb] = updateFields(fdb,newfdb)
-F = fieldnames(newfdb);
-
-for f=1:length(F)
-    fn = fdb.info.fields.(F{f});
-    fn2 = fieldnames(newfdb.(F{f}));
-    new = setdiff(fn2,fn);
-    missing = setdiff(fn,fn2);
-    
-    for i=1:length(missing)
-        newfdb.(F{f}).(missing{i}) = 'NA';
-    end
-    for i=1:length(new)
-        for j=1:fdb.info.N
-            fdb.checksum.(F{f}){j}.(new{i}) = 'NA';
-        end
-        fdb.info.fields.(F{f}){end+1} = new{i};
-    end
-end
 

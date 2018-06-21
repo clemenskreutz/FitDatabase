@@ -116,6 +116,7 @@ for i=1:size(X,2)
     end
 end
 
+fdb.info.predictor_status = 1; % predictors now up-to-date
 
 
 

@@ -11,7 +11,10 @@ pat = {'Bachmann_MSB2011','Bachmann';
     'Reelin_PONE2017','Reelin';
     'Swameye_PNAS2003','Swameye';
     'Toensing_InfectiousDisease_BoardingSchool_2017','BordingSchool';
-    'Toensing_InfectiousDisease_Zika_2017','Zika'};
+    'Toensing_InfectiousDisease_Zika_2017','Zika';
+    'Merkle_JAK2STAT5_PCB2016_CFUE','Merkle_CFUE';
+    'Merkle_JAK2STAT5_PCB2016_CFUEH838','Merkle_CFUE+H838';
+    'Schwen_InsulinMouseHepatocytes_PlosOne2014','Schwen'};
 
 for i=1:size(pat,1)
     names = strrep(names,pat{i,1},pat{i,2});

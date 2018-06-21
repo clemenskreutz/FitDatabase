@@ -12,6 +12,10 @@
 %               or cell of foldernames
 
 function fdb = fdb_add(fdb,folders)
+if ~exist('fdb','var') || isempty(fdb)
+    fdb = fdb_init;
+end
+
 if ~exist('folders','var') || isempty(folders)
     if exist('Results','dir')
     	[~, ~, folders] = fileChooser('./Results', [], -1);
