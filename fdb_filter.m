@@ -25,7 +25,18 @@ for f=1:length(fn)
     end
 end
 
+% Update info.field
+for i=1:length(ind)
+    newinfo.para = fdb.checksum.para{i};
+    newinfo.config = fdb.checksum.config{i};
+    newinfo.optim = fdb.checksum.optim{i};
+    [fdb,newinfo] = fdb_Update_InfoFields(fdb,newinfo);
+    
+    fdb.checksum.config{i,1}  = newinfo.config;
+    fdb.checksum.optim{i,1}   = newinfo.optim;
+    fdb.checksum.para{i,1}    = newinfo.para;
+end
+
 fdb.info.N = length(ind);
 fdb.info.predictor_status;
-fdb = fdb_Update_InfoFields(fdb);
 

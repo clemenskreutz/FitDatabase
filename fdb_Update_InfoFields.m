@@ -27,8 +27,8 @@ for f=1:length(F)
     fn = fdb.info.fields.(F{f});
     fn2 = fieldnames(newinfo.(F{f}));
     
-    new     = setdiff(fn2,fn)
-    missing = setdiff(fn,fn2)
+    new     = setdiff(fn2,fn);
+    missing = setdiff(fn,fn2);
     
     for i=1:length(missing)
         newinfo.(F{f}).(missing{i}) = 'NA';

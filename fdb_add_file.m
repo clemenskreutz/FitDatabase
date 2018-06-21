@@ -11,7 +11,13 @@ end
 
 if exist(file,'file')
     %     arLoad(folders{f});
-    tmp = load(file);
+    try
+        tmp = load(file);
+    catch
+        warning('Could not read file %s',file)
+        return
+    end
+    
     if isfield(tmp,'ar') && isfield(tmp.ar,'ps') && isfield(tmp.ar,'ps_start') && isfield(tmp.ar,'chi2s')
         try
             ar = arUpdateCheckstr(tmp.ar,true);
@@ -114,9 +120,9 @@ else % append
 
     i = ia;
 
-    fdb.fits.chi2s{i,1} = [fdb.fits.chi2s{i,1},ar.chi2s(:)'];
-    fdb.fits.ps{i,1} = [fdb.fits.ps{i,1},ar.ps];
-    fdb.fits.ps_start{i,1} = [ar.ps_start,fdb.fits.ps_start{i,1}];
+    fdb.fits.chi2s{i,1} = [fdb.fits.chi2s{i,1};ar.chi2s(:)];
+    fdb.fits.ps{i,1} = [fdb.fits.ps{i,1};ar.ps];
+    fdb.fits.ps_start{i,1} = [ar.ps_start;fdb.fits.ps_start{i,1}];
 end
 
 
