@@ -96,7 +96,7 @@ if isempty(ia) % append
     
     fdb.files.ar{i,1} = [fdb.info.fdb_path,ar.checkstrs.total,'.mat'];
     fdb.files.source{i,1} = file;
-    fdb.files.fkt{i,1} = [ar.fkt,'.',mexext];
+    fdb.files.fkt{i,1} = [fileparts(file),filesep,ar.fkt,'.',mexext];
     
     fdb.fits.chi2s{i,1} = ar.chi2s(:);
     fdb.fits.ps{i,1} = ar.ps;

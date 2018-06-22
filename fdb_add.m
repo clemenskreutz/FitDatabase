@@ -29,6 +29,8 @@ if ischar(folders)
     folders = {folders};
 end
 
+N0 = length(fdb.fits.chi2s);
+
 for f=1:length(folders)   
     file = [folders{f},filesep,'workspace.mat'];
     [~,name] = fileparts(fileparts(fileparts(folders{f})));
@@ -41,5 +43,7 @@ for f=1:length(folders)
         rethrow(ERR)
     end
 end
+
+fprintf('\n ############ fdb_add: %i fits sequences added. ###########\n',length(fdb.fits.chi2s)-N0);
 
 
